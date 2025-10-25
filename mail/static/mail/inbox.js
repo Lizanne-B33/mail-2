@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 archive_email(currentEmailId)
             }
         })
-
     document
         .querySelector('#unarchive-btn')
         .addEventListener('click', function () {
@@ -28,6 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 unarchive_email(currentEmailId)
             }
         })
+    document.querySelector('#reply-btn').addEventListener('click', function () {
+        if (currentEmailId) {
+            compose_reply(currentEmailId)
+        }
+    })
+
     // Event listener for the compose e-mail send button
     // Per the duck, this calls the function with the event as the argument.
     // This allows access to information about the event and preventing default behavior.
@@ -36,10 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .addEventListener('submit', event => {
             send_email(event)
         })
+
     // By default, load the inbox
     load_mailbox('inbox')
 })
-
 // --------------------------- Compose EMail Process ------------------------//
 // sets the display, clears out fields //
 function compose_email() {
@@ -51,6 +56,33 @@ function compose_email() {
     document.querySelector('#compose-subject').value = ''
     document.querySelector('#compose-body').value = ''
 }
+
+// updates the compose form with data from the e-mail using ID passed in.
+async function compose_reply(id) {
+    // Show compose view and hide other views
+    show_compose()
+    let email = await getEmail(id)
+    // Updates composition fields
+
+    newBody = '\n'
+    newBody += '==================================='
+    newBody += '\n'
+    newBody += email.body
+    document.querySelector('#compose-recipients').value = email.sender
+    document.querySelector('#compose-subject').value = email.subject
+    document.querySelector('#compose-body').value = newBody
+    document.querySelector('#compose-body').focus()
+}
+
+function getEmail(id) {
+    let url = '/emails/' + id
+    return fetch(url)
+        .then(response => response.json())
+        .then(email => {
+            return email
+        })
+}
+
 // Gets data from the form
 send_email = event => {
     // Prevent form submission
