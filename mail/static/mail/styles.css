@@ -1,0 +1,17 @@
+textarea {
+    min-height: 400px;
+}
+.rowStyle {
+    border: 1px;
+    border-color: black;
+    padding: 5px;
+    border-style: solid;
+    cursor: pointer;
+}
+
+.readStyle {
+    background-color: lightgrey;
+}
+.unreadStyle {
+    background-color: white;
+}

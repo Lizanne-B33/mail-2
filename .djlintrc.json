@@ -1,0 +1,12 @@
+{
+    "exclude": ["**/migrations/**", "**/__pycache__/**", "**/static/**"],
+    "indent": 4,
+    "max_line_length": 80,
+    "format_css": true,
+    "format_js": true,
+    "format_html": true,
+    "format_template_tags": true,
+    "require_space_before_closing_tag": true,
+    "require_blank_line_before_block": true,
+    "require_blank_line_after_block": true
+}

@@ -1,0 +1,27 @@
+{
+    // Configure Python Formatting and Linting
+    "python.linting.enabled": true,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pycodestylePath": "pycodestyle",
+    "python.formatting.provider": "autopep8",
+    "editor.formatOnSave": true,
+    "python.formatting.autopep8Path": "autopep8",
+
+    // HTML and CSS formatting with Prettier
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Django template support
+    "files.associations": {
+        "*.html": "django-html"
+    },
+
+    // Configure DJLint for Django Templates
+    "djlint.enable": true,
+    "djlint.formatOnSave": true,
+    "djlint.lintOnSave": true
+}
