@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // --------------------------- Compose EMail Process ------------------------//
 // sets the display, clears out fields //
 function compose_email() {
+
     // Show compose view and hide other views
     show_compose()
 
@@ -62,15 +63,23 @@ async function compose_reply(id) {
     // Show compose view and hide other views
     show_compose()
     let email = await getEmail(id)
-    // Updates composition fields
 
+    // Updates composition fields
+    // creates a variable for the message above the new message.
+    responseInfo = 'On ' + email.timestamp + ' ' + email.sender + ' wrote: '
+
+    // sets the values for the display of the e-mail.
     newBody = '\n'
-    newBody += '==================================='
+    newBody += '\n'
+    newBody += responseInfo
     newBody += '\n'
     newBody += email.body
     document.querySelector('#compose-recipients').value = email.sender
     document.querySelector('#compose-subject').value = email.subject
     document.querySelector('#compose-body').value = newBody
+
+    // Sets focus for user experience to start typing in the top of the screen.
+    document.querySelector('#compose-body').scrollTop = 0
     document.querySelector('#compose-body').focus()
 }
 
@@ -110,13 +119,24 @@ function createEmail(recipients, subject, body) {
     })
         .then(response => response.json())
         .then(result => {
-            // Print result
-            if (result.message === `Email sent successfully.`) {
-                load_mailbox('sent')
+            console.log(result)
+            // Error handling
+            if (result.error)
+                switch (result.error) {
+                    default:
+                        alert(result.error)
+                        break
+                    case 'At least one recipient required.':
+                        alert('At least one recipient required.')
+                        break
+                }
+            if (result.message) {
+                if (result.message === `Email sent successfully.`) {
+                    load_mailbox('sent')
+                }
             }
         })
 }
-
 // --------------------------- View Lists of Emails Processes ---------------//
 // Sets the e-mail views, gets the emails
 function load_mailbox(mailbox) {
@@ -231,11 +251,20 @@ function format_email(email) {
     // use getElementByID to populate the email structure.
     headers = ['sender', 'recipients', 'subject', 'timestamp', 'body']
     headers.forEach(header => {
-        document.getElementById(header).innerHTML = email[header]
+        // If this e-mail was a reply, causes the responses to be stacked
+        // not all concatenated into one long line.
+        if (header === 'body') {
+            document.getElementById(header).innerHTML = email[header].replace(
+                /\n/g,
+                '<br>'
+            )
+        } else {
+            document.getElementById(header).innerHTML = email[header]
+        }
     })
 }
 
-// --------------------------- Helper Functions -----------------------------//
+// --------------------------- Helper Functions -------------------------//
 async function archive_email(id) {
     console.log(id)
     let url = '/emails/' + id
