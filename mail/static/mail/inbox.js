@@ -119,7 +119,6 @@ function createEmail(recipients, subject, body) {
     })
         .then(response => response.json())
         .then(result => {
-            console.log(result)
             // Error handling
             if (result.error)
                 switch (result.error) {
@@ -266,7 +265,6 @@ function format_email(email) {
 
 // --------------------------- Helper Functions -------------------------//
 async function archive_email(id) {
-    console.log(id)
     let url = '/emails/' + id
     await fetch(url, {
         method: 'PUT',
